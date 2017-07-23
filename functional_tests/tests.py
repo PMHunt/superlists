@@ -1,9 +1,11 @@
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
-import unittest
 
-class NewVisitorTest(unittest.TestCase):
+# Functional Tests
+
+class NewVisitorTest(LiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -20,7 +22,7 @@ class NewVisitorTest(unittest.TestCase):
     
     def test_can_start_a_list_and_retrieve_it_later(self):
         # Edith requests our homepage (locally for now)
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
 
         # She checks the page title and header to confirm they're about to do lists
         self.assertIn('To-Do', self.browser.title)
@@ -40,7 +42,7 @@ class NewVisitorTest(unittest.TestCase):
         # When she hits enter, the page updates with her new to-do
         # '1: Buy peacock feathers' is now a line item in the list
         inputbox.send_keys(Keys.ENTER)
-        time.sleep(10)
+        time.sleep(3)
         self.check_for_row_in_list_table('1: Buy peacock feathers')
 
         #there is still a text box allowing her to add more to-dos
